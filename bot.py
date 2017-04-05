@@ -3,9 +3,11 @@ import datetime
 import logging
 import pprint
 import random
+import botan
 
 
 def main():
+    botan_token = 'a76ac58b-892a-484d-8b7f-d0f6403cdcf6'
     quotes = open("baltasar.txt", 'r', encoding='utf8')
     system_random = random.SystemRandom()
     data = quotes.readlines()
@@ -25,7 +27,9 @@ def main():
     dispatcher.add_handler(start_handler)
 
     def quote(bot, update):
-        bot.sendMessage(chat_id=update.message.chat_id, text=system_random.choice(data))
+        message = system_random.choice(data)
+        bot.sendMessage(chat_id=update.message.chat_id, text=message)
+        print(botan.track(botan_token, update.message.from_user.id, message))
 
     quote_handler = CommandHandler('quote', quote)
     dispatcher.add_handler(quote_handler)
