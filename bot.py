@@ -7,11 +7,11 @@ import botan
 
 
 def main():
-    botan_token = 'a76ac58b-892a-484d-8b7f-d0f6403cdcf6'
+    botan_token = 'd8e83502-a500-42e6-9f2d-10372d5548e2'
     quotes = open("baltasar.txt", 'r', encoding='utf8')
     system_random = random.SystemRandom()
     data = quotes.readlines()
-    updater = Updater(token='370834023:AAHV8HUYF2UN24DYAuLIDI3z9UXd52feqcM')
+    updater = Updater(token='331914717:AAEOP8yEUjlks91WS9sJyHGhN7lPhnyvyb4')
 
     dispatcher = updater.dispatcher
 
