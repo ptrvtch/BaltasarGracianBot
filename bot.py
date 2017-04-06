@@ -33,6 +33,8 @@ def main():
             print(botan.track(botan_token, update.message.from_user.id, message))
         except Exception as e:
             print('Exception:' + e)
+            bot.sendMessage(chat_id=update.message.chat_id, text=message, parse_mode='Markdown')
+            print(botan.track(botan_token, update.message.from_user.id, message))
 
     quote_handler = CommandHandler('quote', quote)
     dispatcher.add_handler(quote_handler)
