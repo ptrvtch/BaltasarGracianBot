@@ -1,47 +1,57 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import datetime
+import os
+from telegram.ext import Updater, CommandHandler
 import logging
-import pprint
 import random
-import botan
 
+bot_token = os.environ.get("bot_token")
+
+
+logger = logging.getLogger(__name__)
 
 def main():
-    botan_token = 'd8e83502-a500-42e6-9f2d-10372d5548e2'
-    quotes = open("baltasar.txt", 'r', encoding='utf8')
+    quotes = open("baltasar.txt", "r", encoding="utf8")
     system_random = random.SystemRandom()
     data = quotes.readlines()
-    updater = Updater(token='331914717:AAEOP8yEUjlks91WS9sJyHGhN7lPhnyvyb4')
+    updater = Updater(token=bot_token, use_context=True)
 
     dispatcher = updater.dispatcher
 
     logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', 
-        level=logging.INFO
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
     )
 
-    def start(bot, update):
-        bot.sendMessage(chat_id=update.message.chat_id, text="Добро пожаловать! Нажмите /quote чтобы получить цитату из книги")
+    def start(update, context):
+        logger.info("Start command")
+        context.bot.sendMessage(
+            chat_id=update.message.chat_id,
+            text="Добро пожаловать! Нажмите /quote чтобы получить цитату из книги",
+        )
 
-    start_handler = CommandHandler('start', start)
+    start_handler = CommandHandler("start", start)
     dispatcher.add_handler(start_handler)
 
-    def quote(bot, update):
+    def quote(update, context):
         message = system_random.choice(data)
         try:
-            bot.sendMessage(chat_id=update.message.chat_id, text=message, parse_mode='Markdown')
-            print(botan.track(botan_token, update.message.from_user.id, message))
+            context.bot.sendMessage(
+                chat_id=update.message.chat_id, text=message, parse_mode="Markdown"
+            )
+            # logging.info(flatten_metadata(update.message))
+            logger.info({"message": message[0:20]})
         except Exception as e:
-            print('Exception:' + e)
-            bot.sendMessage(chat_id=update.message.chat_id, text=message, parse_mode='Markdown')
-            print(botan.track(botan_token, update.message.from_user.id, message))
+            logger.warning(str(e))
+            context.bot.sendMessage(
+                chat_id=update.message.chat_id, text=message, parse_mode="Markdown"
+            )
 
-    quote_handler = CommandHandler('quote', quote)
+    quote_handler = CommandHandler("quote", quote)
     dispatcher.add_handler(quote_handler)
 
     updater.start_polling()
-    print('Bot is ready!')
+    logger.info("Bot is ready!")
     updater.idle()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
