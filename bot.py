@@ -3,10 +3,6 @@ from telegram.ext import Updater, CommandHandler
 import logging
 import random
 import requests
-import dotenv
-
-from dotenv import load_dotenv
-load_dotenv()
 
 bot_token = os.environ.get("BOT_TOKEN")
 GA_TRACKING_ID = os.environ.get("GA_TRACKING_ID")
