@@ -48,7 +48,8 @@ def main():
     def start(update, context):
         logger.info("Start command")
         chat_id = update.message.chat_id
-        track_event(update.message.chat_id, 'start', '(not set)')
+        if GA_TRACKING_ID:
+            track_event(update.message.chat_id, 'start', '(not set)')
         context.bot.sendMessage(
             chat_id=chat_id,
             text="Добро пожаловать! Нажмите /quote чтобы получить цитату из книги",
@@ -60,7 +61,8 @@ def main():
     def quote(update, context):
         message = system_random.choice(data)
         chat_id = update.message.chat_id
-        track_event(update.message.chat_id, 'quote', message[0:20])
+        if GA_TRACKING_ID:
+            track_event(update.message.chat_id, 'quote', message[0:20])
         try:
             context.bot.sendMessage(
                 chat_id=chat_id, text=message, parse_mode="Markdown"
